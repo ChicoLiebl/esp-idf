@@ -384,6 +384,22 @@ void spi_get_timing(bool gpio_is_used, int input_delay_ns, int eff_clk, int *dum
   */
 int spi_get_freq_limit(bool gpio_is_used, int input_delay_ns);
 
+/**
+ * @brief gets intr_handler to allow overwriting the end transaction ISR
+ * 
+ * @param host SPI peripheral to get intr handle
+ * @return intr_handle_t 
+ */
+intr_handle_t spi_bus_get_intr(spi_host_device_t host);
+
+/**
+ * @brief gets hal context so hal layer can be accessed directly 
+ * 
+ * @param host SPI peripheral to get hal contect from
+ * @return spi_hal_context_t 
+ */
+spi_hal_context_t spi_bus_get_hal(spi_host_device_t host);
+
 #ifdef __cplusplus
 }
 #endif

@@ -1002,3 +1002,11 @@ esp_err_t SPI_MASTER_ISR_ATTR spi_device_polling_transmit(spi_device_handle_t ha
 
     return spi_device_polling_end(handle, portMAX_DELAY);
 }
+
+intr_handle_t spi_bus_get_intr(spi_host_device_t host) {
+    return bus_driver_ctx[host]->intr;
+}
+
+spi_hal_context_t spi_bus_get_hal(spi_host_device_t host) {
+    return bus_driver_ctx[host]->hal;
+}
