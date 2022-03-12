@@ -123,6 +123,20 @@ static void insert_vector_desc(vector_desc_t *to_insert)
     }
 }
 
+static void pop_vector_desc (unsigned int intno, unsigned int cpu) {
+    vector_desc_t *vd=vector_desc_head;
+    vector_desc_t *prev=NULL;
+    while(vd!=NULL) {
+        if (vd->intno == intno && vd->cpu == cpu) {
+            prev->next = vd->next;
+            free(vd);
+            break;
+        }
+        prev=vd;
+        vd=vd->next;
+    }
+}
+
 //Returns a vector_desc entry for an intno/cpu, or NULL if none exists.
 static vector_desc_t *find_desc_for_int(int intno, int cpu)
 {
@@ -688,6 +702,8 @@ esp_err_t esp_intr_free(intr_handle_t handle)
         handle->vector_desc->flags&=!(VECDESC_FL_NONSHARED|VECDESC_FL_RESERVED);
         //Also kill non_iram mask bit.
         non_iram_int_mask[handle->vector_desc->cpu]&=~(1<<(handle->vector_desc->intno));
+        //Pop vector_desc to allow reallocating a source with to another intno
+        pop_vector_desc(handle->vector_desc->intno, handle->vector_desc->cpu);
     }
     portEXIT_CRITICAL(&spinlock);
     free(handle);
