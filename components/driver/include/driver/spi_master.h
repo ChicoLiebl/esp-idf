@@ -8,6 +8,8 @@
 
 #include "esp_err.h"
 #include "freertos/FreeRTOS.h"
+#include "hal/spi_hal.h"
+#include "esp_intr_alloc.h"
 //for spi_bus_initialization funcions. to be back-compatible
 #include "driver/spi_common.h"
 
